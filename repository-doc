@@ -1,0 +1,16 @@
+ commands
+------------------------
+conf files
+==========
+ /etc/ansible/anisble.cfg
+ ~/.ansible.cfg
+ ./ansible.cfg
+
+ad-hoc
+#ansible all -i inventory -m ping
+#ansible all -m ping
+
+palybook
+#ansible-playbook --syntax-check script.yml
+#ansible-playbook -C script.yml  (dry run)
+#ansible-playbook script.yml     

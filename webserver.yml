@@ -1,0 +1,16 @@
+---
+- name: configure web server
+  hosts: all
+  gather_facts: no
+  tasks:
+  - name: install httpd
+    yum:
+      name: httpd
+      state: latest
+
+  - name: start httpd
+    ansible.builtin.systemd:
+      name: httpd
+      state: started
+      enabled: true
+
