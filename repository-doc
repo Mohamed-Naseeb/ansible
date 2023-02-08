@@ -9,8 +9,16 @@ conf files
 ad-hoc
 #ansible all -i inventory -m ping
 #ansible all -m ping
+#ansible all --list-hosts
+#ansible all -m gater_facts --limit <IP/hostname>
 
 palybook
 #ansible-playbook --syntax-check script.yml
 #ansible-playbook -C script.yml  (dry run)
 #ansible-playbook script.yml     
+
+How to work with different distros of linux
+#use when statement to identify hosts according to conditions that can be matched against variables of gathered facts.
+  when: ansible_distribution == "CentOS"
+  when: ansible_distribution in ["RHEL","CentOS"]
+  when: ansible_distribution == "CentOS" and ansible_distribution_version == "8.2"
