@@ -22,3 +22,80 @@ How to work with different distros of linux
   when: ansible_distribution == "CentOS"
   when: ansible_distribution in ["RHEL","CentOS"]
   when: ansible_distribution == "CentOS" and ansible_distribution_version == "8.2"
+
+forks and serial
+*Ansible uses batches for task execution, which are controlled by a parameter called forks . The default value for forks is 5, which means Ansible executes a task on the first five hosts, waits for the task to complete, and then takes the next batch of five hosts, and so on.
+  eg: we can change this according the requirement , forks: 2
+*serial is a tricky to understand. assume the situation where we have 4 nodes, forks: 5 and serial: 2.
+ First task process on 2 nodes (nodeA, nodeB) simultaneously (should process on 4 nodes, but due to serial configuration it process on 2 nodes only) and then jump into Second task. Second task process on 2 nodes (nodeA, nodeB) simultaneously. Once both tasks completed, it again run playbook for rest of 2 nodes.
+source--https://medium.com/devops-srilanka/difference-between-forks-and-serial-in-ansible-48677ebe3f36
+
+Include and import
+====================
+we can specify tasks in other files and then include or import these tasks to the playbook
+      tasks:
+      - import_tasks: /home/username/tasks_file_path
+      
+      tasks:
+      - name: Include task list in play
+        include_tasks: stuff.yaml
+NOTE: All import* statements are pre-processed at the time playbooks are parsed. All include* statements are processed as they encountered during the execution of the playbook.
+
+It is also possible to import playbooks inside a playbook 
+
+- import_playbook: common_roles.yml
+
+- import_playbook: staging_roles.yml
+  when: env == 'staging'
+
+- name: configure web servers
+  hosts: "{{ env }}_web"
+  roles:
+    - nginx
+    - my_site
+
+source--https://www.toptechskills.com/ansible-tutorials-courses/ansible-include-import-playbooks-tutorial-examples/
+
+Targeting specific nodes
+=========================
+we use inventory to do this.
+[argentian-mailserver]
+192.168.10.2     user= mail_admin useremail= mail_admin_email  (#these are variables which we can use in playbook when using this hosts/node)
+
+[miami-webserver]
+192.168.11.33
+192.168.[4:5].[1.254]
+
+[newyork-database]
+server[a:z].example.com
+server[01:20].example.com
+
+[north-america:children]
+newyork-database
+miami-webserver
+
+Variables
+=========
+https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
+#declaring
+vars:
+  user_tvm: james
+  user_shell: /sbin/nologin
+
+#calling
+ tasks:
+ - name: adding user {{user_tvm}} 
+   user:
+     name: "{{user_tvm}}"
+     shell: "{{user_shell}}"
+
+variables importing from files
+#playlevel
+vars_files:
+  - /home/project2/var/uservars.yml
+  
+#vim uservars.yml 
+user_tvm: james
+user_shell: /sbin/nologin
+
+
