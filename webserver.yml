@@ -1,16 +1,37 @@
 ---
-- name: configure web server
+- name: Configure web server
   hosts: all
-  gather_facts: no
+  gather_facts: false
   tasks:
-  - name: install httpd
+  - name: Install httpd
     yum:
       name: httpd
-      state: latest
-
-  - name: start httpd
+      state: present
+      
+  - name: Itart httpd
     ansible.builtin.systemd:
       name: httpd
       state: started
       enabled: true
 
+  - name: change e-mail address for admin
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf 
+      regexp: '^ServerAdmin'
+      line: ServerAdmin somebodyd@somewhere.net
+    when: ansible_distribution == "CentOS"
+
+  - name: copy default html file for site
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+    register: httpd
+  
+  - name: restart httpd
+    service:
+      name: httpd
+      state: restarted
+    when: httpd.changed
+...      
