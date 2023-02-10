@@ -93,9 +93,28 @@ variables importing from files
 #playlevel
 vars_files:
   - /home/project2/var/uservars.yml
-  
+
+  we can call variables from this file like above calling.eg: name: "{{user_tvm}}"  
+
 #vim uservars.yml 
 user_tvm: james
 user_shell: /sbin/nologin
 
+Managin secrets
+================
+#man ansible-vault
+
+#ansible-vault create password.yml          creating vault file
+you have to give a password after this.
+
+#ansible-vault view password.yml            viewing vault file
+#ansible-vault edit password.yml            for editting
+#ansible-vault encrypt pass_key.yml          change a normal file to vault file
+
+#ansible-vault decrypt pass_key.yml          reverting vault file to a normal file
+#ansible-vault decrypt pass_key.yml --output=passkey.yml 
+
+#ansible-vault rekey user-detail.yml         change password of vault file
+
+how to use vault file in a playbook
 
