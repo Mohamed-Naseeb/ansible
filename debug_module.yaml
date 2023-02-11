@@ -1,0 +1,13 @@
+---
+- name: Ansible debug module in action
+  hosts: all
+  tasks:
+          - name: Print system uptime
+            shell: uptime -p
+            register: system_uptime         # register is used to save the output of a task to a variable eg: system_uptime
+          - name: Print uptime of managed node
+            debug:
+              msg: "{{ system_uptime }}"
+          - name: print using var
+            debug:
+              var: system_uptime

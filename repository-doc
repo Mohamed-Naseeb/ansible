@@ -11,6 +11,7 @@ ad-hoc
 #ansible all -m ping
 #ansible all --list-hosts
 #ansible all -m gater_facts --limit <IP/hostname>
+#ansible servera.lab.example.com -m command -a 'systemctl status httpd'
 
 palybook
 #ansible-playbook --syntax-check script.yml
@@ -117,4 +118,29 @@ you have to give a password after this.
 #ansible-vault rekey user-detail.yml         change password of vault file
 
 how to use vault file in a playbook
+examples are on RHCE text book. please check it.
 
+Managing facts(more info check text book)
+==============
+custome facts are created in ansible control node and copied to required managed hosts using play book.
+example is on Text. Check the Lab section
+
+checkout regester, debug and fail module
+---
+- name: Ansible debug module in action
+  hosts: all
+  tasks:
+          - name: Print system uptime
+            shell: uptime -p
+            register: system_uptime    # The register keyword can be used to capture the output of a command in a variable.
+          - name: Print uptime of managed node
+            debug:
+              msg: "{{ system_uptime }}" # what ever given in msg argument is printed while running playbook
+             
+             or
+          - name: print using var
+            debug:
+              var: system_uptime
+note: 
+msg: – This parameter accepts strings as inputs. This is used to print a customized message. If no message is given, then a generic message like “Hello World!” is
+var: – This accepts strings as input and this is the variable that has been set either by Ansible facts or by the playbook.
