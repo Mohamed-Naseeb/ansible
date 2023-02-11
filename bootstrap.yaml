@@ -12,11 +12,13 @@
 
  - name: add user with sudo previlege and set up ssh-keybased authentication
    hosts: all
+   vars:
+     - user_name: matt 
    tasks:
 
    - name: create matt user
      user:
-       name: matt
+       name: "{{user_name}}"
        uid: 1040
      register: user_added
 
