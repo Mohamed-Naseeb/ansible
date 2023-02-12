@@ -1,0 +1,34 @@
+---
+- name: using handlers
+  hosts: all
+  tasks:
+  - name: copy demo.example.conf configuration template
+    template:
+      src: /var/lib/templates/demo.example.conf.template
+      dest: /etc/httpd/conf.d/demo.example.conf
+    notify:
+      - restart mysql
+      - restart apache
+  handlers:
+  - name: restart mysql
+    service:
+      name: mariadb
+      state: restarted
+  - name: restart apache
+    service:
+      name: httpd
+      state: restarted
+
+#handling failure
+- name: handling failure
+  hosts: all
+  tasks:
+  - name: Run user creation script
+    shell: /usr/local/bin/create_users.sh
+    register: command_result
+    ignore_errors: yes
+  - name: Report script failure
+    fail:
+      msg: "The password is missing in the output"
+    when: "'Password missing' in command_result.stdout"
+    

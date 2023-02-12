@@ -144,3 +144,38 @@ checkout regester, debug and fail module
 note: 
 msg: – This parameter accepts strings as inputs. This is used to print a customized message. If no message is given, then a generic message like “Hello World!” is
 var: – This accepts strings as input and this is the variable that has been set either by Ansible facts or by the playbook.
+
+Conditional tasks and loop
+==========================
+check text book
+register, in detailed view is in this section
+
+Handlers & Handling task failure
+========
+check text book
+NOTE:
+*Remember that handlers are notified when a task reports a changed result but are not notified when it reports an ok or failed result.
+*When a task makes a change to a managed host, it reports the changed state and notifies
+handlers. When a task does not need to make a change, it reports ok and does not notify handlers.
+
+  ignore_errors: yes 
+#ignore_errors in a task to continue playbook execution on the host even if the task fails.
+  force-handlers: yes 
+#force_handlers keyword in a play to force execution of the handler even if a task fails:
+
+#changed_when
+tasks:
+- name: Check local time
+  command: date
+  register: command_result
+  changed_when: false
+- name: Print local time
+  debug:
+    var: command_result.stdout
+
+# block: Defines the main tasks to run.
+# rescue: Defines the tasks to run if the tasks defined in the block clause fail.
+# always: Defines the tasks that will always run independently of the success or failure of tasks
+  defined in the block and rescue clauses.
+examples are on text book
+

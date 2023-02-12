@@ -1,0 +1,76 @@
+---
+- name: working with loop
+  hosts: all
+  tasks:
+  - name: install package
+    yum:
+      name: "{{item}}"
+      state: latest
+    loop: 
+      - vsftpd
+      - httpd
+      - firewalld      
+
+#2nd play
+- name: Loop Register Test
+  gather_facts: no
+  hosts: localhost
+  tasks:
+  - name: Looping Echo Task
+    shell: "echo This is my item: {{ item }}"
+    loop:
+      - one
+      - two
+    register: echo_results
+  
+  - name: Show stdout from the previous task.
+    debug:
+      msg: "STDOUT from previous task: {{ item.stdout }}"
+    loop: "{{ echo_results['results'] }}"
+
+#3rd play
+- name: Restart HTTPD if Postfix is Running
+  hosts: all
+  tasks:
+  - name: Get Postfix server status
+    command: /usr/bin/systemctl is-active postfix
+    ignore_errors: yes
+    register: result
+
+  - name: Restart Apache HTTPD based on Postfix status
+    service:
+      name: httpd
+      state: restarted
+
+#4th play
+- name: add_user
+  hosts: all
+  tasks:
+  - name: user_added
+    user:
+      name: "{{item.name}}"
+      state: present
+      uid: "{{item.id}}"
+      shell: "{{item.shell}}"
+    loop: 
+      - name: james
+        id: 1020
+        shell: /bin/bash
+      - name: mathew
+        id: 1021
+        shell: /bin/bash      
+
+# or 
+# vars:
+#   - var_file_path.yaml
+# or
+# vars:
+   # data: 
+   #   - name: james
+   #     id: 1020
+   #     shell: /bin/bash
+   #   - name: mathew
+   #     id: 1021
+   #     shell: /bin/bash
+#   loop: "{{data}}"
+    
