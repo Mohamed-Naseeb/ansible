@@ -179,3 +179,51 @@ tasks:
   defined in the block and rescue clauses.
 examples are on text book
 
+Roles
+======
+ In Ansible, the role is the primary mechanism for breaking a playbook into multiple files. This simplifies writing complex playbooks, and it makes them easier to reuse.
+
+creating a Role
+---------------
+Creating roles in Ansible requires no special development tools. Creating and using a role is a three
+step process:
+1.Create the role directory structure.
+2.Define the role content.
+3.Use the role in a playbook.
+
+By default, Ansible looks for roles in a subdirectory called roles in the directory containing your Ansible Playbook. This allows you to store roles with the playbook and other supporting files. 
+
+1:Create The Role Directory Structure.
+
+1. we can create the directory structure by ourselves which in (inside roles > role_name > defaults,files,handles,meta,README.md,tasks,vars  - you can check text book to know more about these files) 
+
+2.or we can creating a Role Skeleton using ansible-galaxy command
+eg:
+[user@host playbook-project]$ cd roles
+[user@host roles]$ ansible-galaxy init my_new_role
+[user@host roles]$ ls my_new_role/
+
+2:Define the Role Content
+
+Once you have created the directory structure, you must write the content of the role. A good place to start is the ROLENAME/tasks/main.yml task file, the main list of tasks run by the role.
+Check the text book for more details
+
+3: Using The Role In A Playbook
+[user@host ~]$ cat use-motd-role.yml
+---
+- name: use motd role playbook
+  hosts: remote.example.com
+  remote_user: devops
+  become: true
+  roles:
+    - motd
+
+Changing a Role's Behavior with Variables
+------------------------------------------
+check text book -- it discuss about how different types of variable format can be used to alter roles behavior
+
+check the guided exercise of page 319 on text book
+
+Deploying Roles With Ansible Galaxy
+====================================
+
