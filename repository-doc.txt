@@ -230,3 +230,17 @@ Deploying Roles With Ansible Galaxy
 Deploying files to managed hosts
 =================================
 check managing_files.yaml
+
+# Troubleshooting ansible
+===========================
+
+[student@demo ~]$ ansible-playbook --check playbook.yml
+to run a playbook in check mode (-C is as same as check mode, it's also called dry run)
+
+A task can determine if the playbook is running in check mode by testing the value of the magic
+variable ansible_check_mode. This Boolean variable is set to true if the playbook is running in
+check mode.
+tasks:
+- name: task always in check mode
+  shell: uname -a
+  check_mode: yes
