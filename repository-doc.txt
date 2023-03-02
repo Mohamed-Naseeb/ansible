@@ -179,3 +179,6 @@ tasks:
   defined in the block and rescue clauses.
 examples are on text book
 
+Deploying files to managed hosts
+=================================
+check managing_files.yaml
